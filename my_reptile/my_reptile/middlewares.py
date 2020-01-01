@@ -4,11 +4,18 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import random
 
 from scrapy import signals
+from my_reptile.settings import USER_AGENT_LIST
 
 
-class MyReptileSpiderMiddleware(object):
+class RandomUserAgentMiddleware(object):
+    def process_request(self, request, spider):
+        rand_use = random.choice(USER_AGENT_LIST)
+        if rand_use:
+            request.headers.setdefault('User-Agent', rand_use)
+
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
