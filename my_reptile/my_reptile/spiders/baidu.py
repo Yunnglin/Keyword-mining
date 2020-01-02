@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
-from scrapy import Spider, Request,http
+from scrapy import Spider, Request, http
 from urllib import parse
 import logging
+import re
+from w3lib.html import remove_tags
 
 logger = logging.getLogger(__name__)
+
+
+def go_remove_tag(value):
+    # 移除标签
+    content = remove_tags(value)
+    # 移除空格 换行
+    return re.sub(r'[\t\r\n\s]', '', content)
 
 
 class BaiduSpider(Spider):
@@ -30,5 +39,7 @@ class BaiduSpider(Spider):
         logger.debug("-----------------------------------------------------------")
 
     def get_new_key(self, response):
-        logger.debug(response.url)
+        if response.status is 200:
+            logger.debug(response.url)
+            print(go_remove_tag(response.body.decode(response.encoding)))
         pass
